@@ -24,8 +24,13 @@ public final class RemoteFeedLoader: FeedLoader {
 			case .failure(_):
 				completion(.failure(RemoteFeedLoader.Error.connectivity))
 
-			default:
-				completion(.success([]))
+			case let .success((_, resp)):
+				switch resp.statusCode {
+				case 200:
+					completion(.success([]))
+				default:
+					completion(.failure(RemoteFeedLoader.Error.invalidData))
+				}
 			}
 		}
 	}
