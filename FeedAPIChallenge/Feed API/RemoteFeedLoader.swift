@@ -26,11 +26,11 @@ public final class RemoteFeedLoader: FeedLoader {
 
 			case let .success((data, resp)):
 				guard resp.statusCode == 200,
-				      let _ = try? JSONDecoder().decode(RemoteFeedPayload.self, from: data) else {
+				      let feedItems = try? JSONDecoder().decode(RemoteFeedPayload.self, from: data) else {
 					completion(.failure(RemoteFeedLoader.Error.invalidData))
 					return
 				}
-				completion(.success([]))
+				completion(.success(feedItems.feed))
 			}
 		}
 	}
